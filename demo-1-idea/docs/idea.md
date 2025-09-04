@@ -1,27 +1,27 @@
 # Idea
 
-This document is a rough idea for stakeholders to fill in so that the product manager agent can generate a PRD.
-
 ## Goals
 
-1. We want to _______
+We want to make a web-based leave management system for our small company.
 
 ## Requirements
 
-1. The product must _______
-2. The product must _______
-3. The product must _______
+1. The product must be web-based, accessible via modern web browsers and mobile browsers.
+2. Simple user authentication (email/password).
+
 
 ## Scope
 
 ### In scope
 
-(List the features and functionalities that will be included in the product)
+1. Web-based UI
+2. Basic user authentication (email/password)
 
 ### Out of scope
 
-(List the features and functionalities that will not be included in the product)
+1. Any forms of notifications.
+2. Admin panel.
 
 ## Notes, considerations and constraints
 
-(List down anything else)
+We need it fast. Focus on MVP. We need to launch this within 2 weeks.
