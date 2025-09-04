@@ -16,6 +16,7 @@ Explore how agentic AI is transforming software development across the entire li
 Project should run in Claude Code, demonstrating the entire software development lifecycle using agentic AI, namely (based on [IBM's Software Development Life Cycle](https://www.ibm.com/think/topics/sdlc)):
 
 1. Planning (`/plan-and-analyze`)
+    - Agent: Product manager
     - Define goals
     - Define requirements
     - Identify scope
@@ -23,6 +24,7 @@ Project should run in Claude Code, demonstrating the entire software development
     - Output: Product requirement document (PRD), save it at `docs/prd.md`
 
 2. Design (`/design`)
+    - Agent: Software architect
     - Define project architecture
     - Software stack
     - Database design
@@ -30,6 +32,7 @@ Project should run in Claude Code, demonstrating the entire software development
     - Output: Software design document (SDD), save it at `docs/sdd.md`
 
 3. Sprint planning (`/sprint-plan`)
+    - Agent: Scrum master
     - Read PRD and SDD, break down into sprints.
     - Each sprint must have clear goals, deliverables, and acceptance criteria
     - Each sprint should be no longer than 2.5 days (half a week)
