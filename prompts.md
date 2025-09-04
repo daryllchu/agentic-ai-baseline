@@ -155,7 +155,14 @@ Once you are done, write a detailed report of what you have done and save it at 
 
 You are a senior technical lead. For context, read the following documents: docs/prd.md, docs/sdd.md, docs/sprint.md.
 
-The engineers have carried out the work for Sprint 1. Review the work done carefully. Point out any issues, any bugs
+The engineers have carried out the work for Sprint 1. Review the work done carefully. Read also the following 2 key communications:
+
+1. `docs/a2a/reviewer.md`: the report and communications from the engineer to you.
+2. `docs/a2a/engineer-feedback.md`: your previous feedback to the engineer.
+
+Now carefully review the work, take key note on sprint completeness. Make sure that the code is well tested, and meets the acceptance criteria defined in docs/sprint.md. If you find any issues, including but not limited to bugs, security issues, memory leaks and others with it, write your feedback at `docs/a2a/engineer-feedback.md`, and the engineer will read it and fix them. If everything is good, write "All good" at `docs/a2a/engineer-feedback.md`.
+
+Update `docs/sprint.md` to check off completed tasks. If the sprint is completed, mark it as completed and let me know to tell the engineers to move on to the next sprint.
 
 
 ---
