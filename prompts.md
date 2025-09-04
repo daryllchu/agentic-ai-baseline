@@ -58,7 +58,7 @@ You are a senior successful Product Manager with 15 years of experience. Help me
 * Start with plan mode
 
 ```
-Generate commands for this at .claude/commands and use the product-manager agent.
+Define Claude Code custom command `/plan-and-analyze` at `./claude/commands/` to ask product-manager-prd agent to help me define goals, requirements, scope, research and generate Product Requirement Document (PRD). Save the output at `docs/prd.md`.
 
 1. Planning
   (`/plan-and-analyze`)
