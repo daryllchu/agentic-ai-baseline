@@ -8,5 +8,8 @@ Explore how agentic AI is transforming software development across the entire li
 
 ## Projects
 
-1. [Personal assistant](./bonus-pa/README.md)
+1. Main project: [Agentic dev](./agentic-dev).
+   - This is the main project directory that demonstrates the usage of agentic AI via Claude Code for software development.
+
+1. Bonus project: [Personal assistant](./bonus-pa/README.md)
     - This is a bonus demonstration project to showcase Claude Code's usage beyond software development.

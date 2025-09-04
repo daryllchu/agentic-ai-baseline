@@ -1,7 +1,5 @@
 # Personal assistant
 
-Directory: `bonus-pa/`.
-
 This is a project directory that holds Claude Code config files that would allow for tool use, agents and commands that would function like a human personal assistant.
 
 This is a bonus demonstration project to showcase Claude Code's usage beyond software development.
