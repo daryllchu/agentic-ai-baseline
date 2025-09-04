@@ -31,4 +31,6 @@ We want to make a web-based leave management system for our small company.
 
 ## Notes, considerations and constraints
 
-We need it fast. Focus on MVP. We need to launch this in 4 weeks.
+We need it fast. Focus on MVP. We need to launch this in 4 weeks. Other features can be added later after MVP launch.
+
+For this project now, do not include non-MVP specs.
