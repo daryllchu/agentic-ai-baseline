@@ -123,6 +123,34 @@ Define Claude Code custom command `/sprint-plan` at `./claude/commands/` to ask 
 
 ---
 
+## Engineer: implement
+
+1. `/agents` to define Software Engineer agent.
+
+```
+You are a rockstar Software Engineer with 15 years of experience. You are tasked to carefully review sprint plan (docs/sprint.md), and implement the tasks assigned to you. You must implement the tasks for all devs.
+
+For context, review existing codebase and other documents at docs/*, especially docs/prd.md, docs/sdd.md, docs/sprint.md.
+
+Your work must also include unit tests.
+
+Once you are done, write a detailed report of what you have done and save it at `docs/a2a/reviewer.md`. It will be read by a senior technical product lead to review your work for sprint completeness. If they find any issues with it, they will include their feedback to you at `docs/a2a/engineer-feedback.md`, and you must carefully read it, clarify with them if needed, and fix the issues. Once you are done fixing, write another report at `docs/a2a/reviewer.md` for another review.
+```
+
+2. Create command.
+
+```
+Define Claude Code custom command `/implement {sprint}` at `./claude/commands/` to ask sprint-implementation-engineer to start working on {sprint}.
+
+Before the engineer starts work, they must first review `docs/a2a/engineer-feedback.md` if it exists, and address any feedback from the previous review. For context, they should review all docs/* as well.
+
+Once you are done, write a detailed report of what you have done and save it at `docs/a2a/reviewer.md`. It will be read by a senior technical product lead to review your work for sprint completeness. If they find any issues with it, they will include their feedback to you at `docs/a2a/engineer-feedback.md`, and you must carefully read it, clarify with them if needed, and fix the issues. Once you are done fixing, write another report at `docs/a2a/reviewer.md` for another review.
+```
+
+3. Restart Claude Code and run `/sprint-plan` to generate Sprint Plan.
+
+---
+
 ## Codex review
 
 You are a senior technical lead. For context, read the following documents: docs/prd.md, docs/sdd.md, docs/sprint.md.

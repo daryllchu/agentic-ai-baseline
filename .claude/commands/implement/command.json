@@ -1,0 +1,12 @@
+{
+  "name": "implement",
+  "description": "Start implementation of a specific sprint with review workflow",
+  "args": [
+    {
+      "name": "sprint",
+      "type": "string",
+      "description": "Sprint identifier (e.g., sprint-1, sprint-2)",
+      "required": true
+    }
+  ]
+}
