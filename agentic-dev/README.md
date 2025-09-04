@@ -23,7 +23,7 @@ Project should run in Claude Code, demonstrating the entire software development
     - Research and refine and generate PRD
     - Output: Product requirement document (PRD), save it at `docs/prd.md`
 
-2. Design (`/design`)
+2. Architect (`/architect`)
     - Agent: Software architect
     - Define project architecture
     - Software stack
@@ -32,7 +32,7 @@ Project should run in Claude Code, demonstrating the entire software development
     - Output: Software design document (SDD), save it at `docs/sdd.md`
 
 3. Sprint planning (`/sprint-plan`)
-    - Agent: Scrum master
+    - Agent: Product manager (Scrum master)
     - Read PRD and SDD, break down into sprints.
     - Each sprint must have clear goals, deliverables, and acceptance criteria
     - Each sprint should be no longer than 2.5 days (half a week)
