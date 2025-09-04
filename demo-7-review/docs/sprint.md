@@ -41,44 +41,44 @@ Establish the core backend infrastructure with database schema, authentication s
 
 #### Dev 1 - Backend Application Setup
 - **Task 1.1:** Initialize Node.js project with Express framework
-  - [ ] Set up project structure following MVC pattern
-  - [ ] Install core dependencies (express, cors, helmet, dotenv)
-  - [ ] Configure environment variables and .env.example
-  - [ ] Set up error handling middleware
+  - [x] Set up project structure following MVC pattern
+  - [x] Install core dependencies (express, cors, helmet, dotenv)
+  - [x] Configure environment variables and .env.example
+  - [x] Set up error handling middleware
   
 - **Task 1.2:** Implement JWT authentication system
-  - [ ] Create JWT utility functions for token generation/validation
-  - [ ] Implement password hashing with bcrypt
-  - [ ] Build login endpoint with email/password validation
-  - [ ] Create authentication middleware for protected routes
-  - [ ] Implement 8-hour token expiry
+  - [x] Create JWT utility functions for token generation/validation
+  - [x] Implement password hashing with bcrypt
+  - [x] Build login endpoint with email/password validation
+  - [x] Create authentication middleware for protected routes
+  - [x] Implement 8-hour token expiry
 
 #### Dev 2 - Database & Infrastructure
 - **Task 1.3:** Database design and setup
   - [ ] Provision PostgreSQL database (local + staging)
-  - [ ] Create database schema with users and leave_requests tables
-  - [ ] Set up Knex.js migrations for version control
-  - [ ] Implement database indexes for performance
-  - [ ] Create seed script for HR admin user
+  - [x] Create database schema with users and leave_requests tables
+  - [x] Set up Knex.js migrations for version control
+  - [x] Implement database indexes for performance
+  - [x] Create seed script for HR admin user
 
 - **Task 1.4:** Development environment setup
-  - [ ] Configure Docker containers (optional but recommended)
-  - [ ] Set up Git repository with proper .gitignore
+  - [x] Configure Docker containers (optional but recommended)
+  - [x] Set up Git repository with proper .gitignore
   - [ ] Create basic CI/CD pipeline structure
-  - [ ] Document local development setup in README
+  - [x] Document local development setup in README
 
 ### Acceptance Criteria
-- [ ] Database migrations run successfully
-- [ ] HR admin can login and receive JWT token
-- [ ] Authentication middleware blocks unauthorized access
-- [ ] API returns proper error responses
-- [ ] Project runs locally for both developers
+- [x] Database migrations run successfully
+- [x] HR admin can login and receive JWT token
+- [x] Authentication middleware blocks unauthorized access
+- [x] API returns proper error responses
+- [x] Project runs locally for both developers
 
 ### Testing Requirements
-- [ ] Unit tests for JWT generation and validation
-- [ ] Unit tests for password hashing and verification
-- [ ] Integration test for login flow
-- [ ] Database connection and migration tests
+- [x] Unit tests for JWT generation and validation
+- [x] Unit tests for password hashing and verification
+- [x] Integration test for login flow
+- [x] Database connection and migration tests
 
 ### Dependencies
 - None (first sprint)
@@ -90,12 +90,12 @@ Establish the core backend infrastructure with database schema, authentication s
   - **Mitigation:** Use established JWT library, avoid custom crypto
 
 ### Progress Tracking
-- [ ] Project initialized and dependencies installed
-- [ ] Database schema created and migrated
-- [ ] Authentication system functional
-- [ ] Login endpoint tested and working
-- [ ] HR admin user seeded successfully
-- [ ] Basic documentation completed
+- [x] Project initialized and dependencies installed
+- [x] Database schema created and migrated
+- [x] Authentication system functional
+- [x] Login endpoint tested and working
+- [x] HR admin user seeded successfully
+- [x] Basic documentation completed
 
 ---
 
