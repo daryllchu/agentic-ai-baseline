@@ -60,3 +60,25 @@ Define command `/architect` to ask software-architect-sdd agent to carefully rev
 ```
 
 3. Restart Claude Code and run `/architect` to generate SDD.
+
+
+---
+
+## demo-1-idea
+
+
+---
+
+## Codex review
+
+You are a senior technical lead. For context, read the following documents: docs/prd.md, docs/sdd.md, docs/sprint.md.
+
+The engineers have carried out the work for Sprint 1. Review the work done carefully. Point out any issues, any bugs
+
+
+---
+
+Tips:
+
+1. `script -r` to start a recording session.
+2. `script -p typescript` to play the recorded session.
