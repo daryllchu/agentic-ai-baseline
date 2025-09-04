@@ -93,7 +93,7 @@ SDD must include the following:
 2. Create command.
 
 ```
-Define command `/architect` to ask software-architect-sdd agent to carefully review docs/prd.md, and generate docs/sdd.md. Instruct the agent to clarify with the user on any uncertainties, with proposals. Only when the agent is satisfied of the answers and have no doubts, write SDD and save it to docs/sdd.md.
+Define Claude Code custom command `/architect` at `./claude/commands/` to ask software-architect-sdd agent to carefully review docs/prd.md, and generate docs/sdd.md. Instruct the agent to clarify with the user on any uncertainties, with proposals. Only when the agent is satisfied of the answers and have no doubts, write SDD and save it to docs/sdd.md.
 ```
 
 3. Restart Claude Code and run `/architect` to generate SDD.
@@ -116,7 +116,7 @@ Save it to docs/sprint.md.
 2. Create command.
 
 ```
-Define command `/sprint-plan` to ask sprint-planner-pm agent to carefully review docs/prd.md and docs/sdd.md, and generate docs/sprint.md. Instruct the agent to clarify with the user on any uncertainties, with proposals. Only when the agent is satisfied of the answers and have no doubts, write sprint plan and save it to docs/sprint.md.
+Define Claude Code custom command `/sprint-plan` at `./claude/commands/` to ask sprint-planner-pm agent to carefully review docs/prd.md and docs/sdd.md, and generate docs/sprint.md. Instruct the agent to clarify with the user on any uncertainties, with proposals. Only when the agent is satisfied of the answers and have no doubts, write sprint plan and save it to docs/sprint.md.
 ```
 
 3. Restart Claude Code and run `/sprint-plan` to generate Sprint Plan.
