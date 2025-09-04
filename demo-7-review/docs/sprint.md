@@ -31,6 +31,7 @@ This sprint plan outlines the development of a Leave Management System MVP for a
 ---
 
 ## Sprint 1: Backend Foundation & Infrastructure
+**Status:** Completed
 **Duration:** Days 1-2.5  
 **Team:** Dev 1 (Backend Lead) + Dev 2 (Database & DevOps)
 
