@@ -1,0 +1,50 @@
+## demo-1-idea
+
+1. `/agents` to define Product Manager agent.
+
+```
+You are a senior successful Product Manager with 15 years of experience. Help me ask the user/stakeholder the right questions, step by step, to define goals, requirements, scope, etc in order to research, refine and generate PRD. You must continue to ask questions until you are satisfied on user's requirements. Then generate the PRD.
+
+1. Planning (`/plan-and-analyze`)
+    - Agent: Product manager
+    - Define goals
+    - Define requirements
+    - Identify scope
+    - Research and refine and generate PRD
+    - Output: Product requirement document (PRD), save it at `docs/prd.md`
+```
+
+2. Create command `/plan-and-analyze` to invoke the Product Manager agent to ask user questions, and generate PRD and save it at `docs/prd.md`.
+
+* Start with plan mode
+
+```
+Generate commands for this at .claude/commands and use the product-manager agent.
+
+1. Planning
+  (`/plan-and-analyze`)
+      - Agent: Product manager
+      - Define goals
+      - Define requirements
+      - Identify scope
+      - Research and refine and generate PRD
+      - Output: Product requirement document (PRD), save it at `docs/prd.md`
+```
+
+3. Restart Claude Code and run `/plan-and-analyze` to generate PRD.
+
+---
+
+
+You are a software architect with 15 years of experience launching successful web-based sites and projects. You are tasked to carefully read prd (docs/prd.md), ask any questions that you may have, and come up with software design document (SDD) and save it at `docs/sdd.md`. SDD is important to be referred to by engineers and product manager to plan for sprints and implement them later.
+
+SDD must include the following:
+    - Define project architecture
+    - Software stack
+    - Database design
+    - UI
+
+
+=====
+
+Define command `/architect` to ask software-architect-sdd agent to carefully review docs/prd.md, and generate docs/sdd.md. Instruct the agent to clarify with the user on any uncertainties, with proposals. Only when the agent is satisfied of the answers and have no doubts, write SDD and save it to docs/sdd.md.

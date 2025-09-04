@@ -3,8 +3,7 @@
 import chalk from 'chalk';
 import inquirer from 'inquirer';
 import { spawn } from 'child_process';
-import { format, parseISO, addDays, isWithinInterval } from 'date-fns';
-import fetch from 'node-fetch';
+import { format, parseISO, addDays, addHours, setHours, setMinutes, isWeekend } from 'date-fns';
 
 // Function to execute Claude command and get response
 async function executeClaudeCommand(prompt) {
@@ -39,299 +38,396 @@ async function executeClaudeCommand(prompt) {
   });
 }
 
-// Function to identify events that might need restaurant bookings
-function identifyDiningEvents(events) {
-  const diningKeywords = [
-    'dinner', 'lunch', 'breakfast', 'brunch', 'meal',
-    'dining', 'restaurant', 'eat', 'food', 'celebrate',
-    'birthday', 'anniversary', 'date', 'meeting over',
-    'catch up', 'reunion', 'party', 'gathering'
-  ];
-
-  return events.filter(event => {
-    const title = (event.title || '').toLowerCase();
-    const description = (event.description || '').toLowerCase();
-    const location = (event.location || '').toLowerCase();
-    
-    // Check if any dining keyword is present
-    const hasDiningKeyword = diningKeywords.some(keyword => 
-      title.includes(keyword) || 
-      description.includes(keyword) || 
-      location.includes(keyword)
-    );
-
-    // Also check for events that might be social gatherings
-    const isSocialEvent = title.includes('with') || 
-                         title.includes('meet') || 
-                         description.includes('discuss over');
-
-    // Exclude virtual meetings
-    const isVirtual = location.includes('zoom') || 
-                     location.includes('meet') || 
-                     location.includes('virtual') ||
-                     location.includes('online');
-
-    return (hasDiningKeyword || isSocialEvent) && !isVirtual;
-  });
-}
-
-// Function to scrape Chope for restaurant availability
-async function searchChopeRestaurants(date, pax, budget, location = 'Singapore') {
-  console.log(chalk.yellow('\n🔍 Searching for available restaurants on Chope.co...'));
+// Smart time suggestions based on event type
+function suggestTimeSlots(eventType, preferredDate, duration = 60) {
+  const suggestions = [];
+  const baseDate = preferredDate ? new Date(preferredDate) : new Date();
   
-  // This is a simulated function as actual web scraping would require more complex setup
-  // In production, you would use Chope's API or proper web scraping
-  
-  // Simulated restaurant suggestions based on budget
-  const restaurants = {
-    low: [
-      { name: 'Din Tai Fung', cuisine: 'Chinese', price: '$', rating: 4.5, availability: 'Available' },
-      { name: 'Sushi Express', cuisine: 'Japanese', price: '$', rating: 4.0, availability: 'Available' },
-      { name: 'PastaMania', cuisine: 'Italian', price: '$', rating: 3.8, availability: 'Limited slots' }
+  // Define time slots based on event type
+  const timeSlots = {
+    'breakfast': [
+      { hour: 7, minute: 30, name: 'Early breakfast' },
+      { hour: 8, minute: 30, name: 'Standard breakfast' },
+      { hour: 9, minute: 30, name: 'Late breakfast' }
     ],
-    medium: [
-      { name: 'Crystal Jade', cuisine: 'Chinese', price: '$$', rating: 4.4, availability: 'Available' },
-      { name: 'Akira Back', cuisine: 'Japanese-Korean', price: '$$', rating: 4.6, availability: 'Available' },
-      { name: 'Lawry\'s The Prime Rib', cuisine: 'Western', price: '$$', rating: 4.5, availability: 'Limited slots' }
+    'coffee': [
+      { hour: 10, minute: 0, name: 'Morning coffee' },
+      { hour: 15, minute: 0, name: 'Afternoon coffee' },
+      { hour: 16, minute: 30, name: 'Late afternoon coffee' }
     ],
-    high: [
-      { name: 'Odette', cuisine: 'French', price: '$$$', rating: 4.8, availability: 'Waitlist only' },
-      { name: 'Les Amis', cuisine: 'French', price: '$$$', rating: 4.7, availability: 'Limited slots' },
-      { name: 'Waku Ghin', cuisine: 'Japanese', price: '$$$', rating: 4.9, availability: 'Available' }
+    'lunch': [
+      { hour: 12, minute: 0, name: 'Early lunch' },
+      { hour: 12, minute: 30, name: 'Standard lunch' },
+      { hour: 13, minute: 0, name: 'Late lunch' }
+    ],
+    'dinner': [
+      { hour: 18, minute: 30, name: 'Early dinner' },
+      { hour: 19, minute: 0, name: 'Standard dinner' },
+      { hour: 20, minute: 0, name: 'Late dinner' }
+    ],
+    'meeting': [
+      { hour: 9, minute: 0, name: 'Morning meeting' },
+      { hour: 10, minute: 30, name: 'Mid-morning meeting' },
+      { hour: 14, minute: 0, name: 'Afternoon meeting' },
+      { hour: 15, minute: 30, name: 'Late afternoon meeting' }
+    ],
+    'drinks': [
+      { hour: 17, minute: 30, name: 'After work drinks' },
+      { hour: 18, minute: 30, name: 'Happy hour' },
+      { hour: 20, minute: 0, name: 'Evening drinks' }
     ]
   };
 
-  // Select restaurants based on budget
-  let selectedRestaurants = [];
-  if (budget <= 30) {
-    selectedRestaurants = restaurants.low;
-  } else if (budget <= 80) {
-    selectedRestaurants = restaurants.medium;
-  } else {
-    selectedRestaurants = restaurants.high;
+  // Get appropriate time slots
+  const slots = timeSlots[eventType] || timeSlots['meeting'];
+  
+  // Generate suggestions for the next 7 days
+  for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
+    const targetDate = addDays(baseDate, dayOffset);
+    
+    // Skip weekends for business meetings
+    if (eventType === 'meeting' && isWeekend(targetDate)) {
+      continue;
+    }
+    
+    slots.forEach(slot => {
+      const suggestedTime = setMinutes(setHours(targetDate, slot.hour), slot.minute);
+      
+      // Only suggest future times
+      if (suggestedTime > new Date()) {
+        suggestions.push({
+          date: suggestedTime,
+          description: `${slot.name} on ${format(suggestedTime, 'EEEE, MMM dd')}`,
+          timeString: format(suggestedTime, 'yyyy-MM-dd HH:mm')
+        });
+      }
+    });
   }
-
-  // Add booking URLs (simulated)
-  selectedRestaurants = selectedRestaurants.map(r => ({
-    ...r,
-    bookingUrl: `https://www.chope.co/singapore-restaurants/${r.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`
-  }));
-
-  return selectedRestaurants;
+  
+  return suggestions.slice(0, 9); // Return top 9 suggestions
 }
 
-async function bookRestaurant() {
-  console.log(chalk.blue.bold('\n🍽️  Restaurant Booking Assistant\n'));
+// Check calendar availability
+async function checkAvailability(startTime, endTime) {
+  const checkPrompt = `Using the Google Calendar MCP server, please check if there are any conflicts between ${startTime} and ${endTime}. Return "AVAILABLE" if the time slot is free, or "CONFLICT: [event name]" if there's a conflict.`;
+  
+  try {
+    const response = await executeClaudeCommand(checkPrompt);
+    return response.includes('AVAILABLE');
+  } catch (error) {
+    console.log(chalk.yellow('⚠️  Could not verify availability'));
+    return true; // Assume available if we can't check
+  }
+}
+
+async function smartScheduling() {
+  console.log(chalk.blue.bold('\n📅 Smart Scheduling Assistant\n'));
+  console.log(chalk.white('I\'ll help you find the perfect time for your event.\n'));
 
   try {
-    // Get upcoming events from calendar
-    const endDate = format(addDays(new Date(), 30), 'yyyy-MM-dd');
+    // First, check if there are any events to reschedule
+    const endDate = format(addDays(new Date(), 14), 'yyyy-MM-dd');
     const calendarPrompt = `Using the Google Calendar MCP server, please:
-    1. Get all events for the next 30 days (until ${endDate})
-    2. Include event title, date, time, location, attendees, and description
+    1. Get all events for the next 14 days (until ${endDate})
+    2. Look for events that might need scheduling or have tentative times
     3. Format as JSON array with fields: title, startTime, endTime, location, attendees, description
     
     Return ONLY the JSON array, no additional text.`;
 
-    console.log(chalk.yellow('📅 Scanning calendar for upcoming events...'));
+    console.log(chalk.yellow('📅 Scanning your calendar...'));
     
-    const eventsResponse = await executeClaudeCommand(calendarPrompt);
-    
-    let events = [];
+    let existingEvents = [];
     try {
+      const eventsResponse = await executeClaudeCommand(calendarPrompt);
       const jsonMatch = eventsResponse.match(/\[[\s\S]*\]/);
       if (jsonMatch) {
-        events = JSON.parse(jsonMatch[0]);
+        existingEvents = JSON.parse(jsonMatch[0]);
       }
     } catch (parseError) {
-      console.log(chalk.red('⚠️  Could not parse calendar data.'));
-      // Continue with manual entry
+      // Continue without existing events
     }
 
-    // Identify potential dining events
-    const diningEvents = identifyDiningEvents(events);
+    // Ask user what they want to schedule
+    const initialChoice = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'action',
+        message: 'What would you like to do?',
+        choices: [
+          { name: 'Schedule a new event', value: 'new' },
+          { name: 'Find time for a specific type of meeting', value: 'smart' },
+          ...(existingEvents.length > 0 ? [{ name: 'Reschedule an existing event', value: 'reschedule' }] : [])
+        ]
+      }
+    ]);
 
-    if (diningEvents.length > 0) {
-      console.log(chalk.green(`\n✨ Found ${diningEvents.length} potential dining event(s):\n`));
+    let eventDetails = {};
+
+    if (initialChoice.action === 'reschedule' && existingEvents.length > 0) {
+      // Show existing events
+      console.log(chalk.green('\n📋 Your upcoming events:\n'));
       
-      diningEvents.forEach((event, index) => {
-        const date = event.startTime ? format(parseISO(event.startTime), 'MMM dd, HH:mm') : 'Date TBD';
-        console.log(chalk.white(`${index + 1}. ${event.title}`));
-        console.log(chalk.gray(`   📅 ${date}`));
-        if (event.location) {
-          console.log(chalk.gray(`   📍 ${event.location}`));
-        }
-        if (event.attendees && event.attendees.length > 0) {
-          console.log(chalk.gray(`   👥 ${event.attendees.length + 1} people (including you)`));
-        }
-        console.log();
-      });
-
-      // Ask user to select an event or create new
       const eventChoice = await inquirer.prompt([
         {
           type: 'list',
           name: 'selection',
-          message: 'Which event would you like to book a restaurant for?',
-          choices: [
-            ...diningEvents.map((e, i) => ({
-              name: `${e.title} (${e.startTime ? format(parseISO(e.startTime), 'MMM dd') : 'Date TBD'})`,
-              value: i
-            })),
-            { name: 'Create a new booking', value: -1 }
-          ]
-        }
-      ]);
-
-      let bookingDetails = {};
-
-      if (eventChoice.selection >= 0) {
-        const selectedEvent = diningEvents[eventChoice.selection];
-        bookingDetails = {
-          date: selectedEvent.startTime,
-          title: selectedEvent.title,
-          existingAttendees: selectedEvent.attendees ? selectedEvent.attendees.length : 0
-        };
-      }
-    } else {
-      console.log(chalk.yellow('\nNo upcoming dining events found in your calendar.'));
-      console.log(chalk.white('Let\'s create a new restaurant booking.\n'));
-    }
-
-    // Collect booking details
-    const questions = [
-      {
-        type: 'input',
-        name: 'date',
-        message: 'What date? (YYYY-MM-DD or descriptive like "next Friday"):',
-        when: (answers) => !bookingDetails.date,
-        validate: (input) => input.length > 0 || 'Please enter a date'
-      },
-      {
-        type: 'number',
-        name: 'pax',
-        message: 'How many people? (including yourself):',
-        default: bookingDetails.existingAttendees ? bookingDetails.existingAttendees + 1 : 2,
-        validate: (input) => input > 0 && input <= 20 || 'Please enter a valid number (1-20)'
-      },
-      {
-        type: 'number',
-        name: 'budget',
-        message: 'Budget per person (SGD):',
-        default: 50,
-        validate: (input) => input > 0 || 'Please enter a valid budget'
-      },
-      {
-        type: 'list',
-        name: 'mealType',
-        message: 'What type of meal?',
-        choices: ['Lunch', 'Dinner', 'Brunch', 'High Tea'],
-        default: 'Dinner'
-      },
-      {
-        type: 'checkbox',
-        name: 'cuisinePreferences',
-        message: 'Cuisine preferences (select all that apply):',
-        choices: [
-          'Chinese',
-          'Japanese',
-          'Korean',
-          'Thai',
-          'Italian',
-          'French',
-          'Western',
-          'Indian',
-          'Vegetarian',
-          'Halal'
-        ]
-      },
-      {
-        type: 'input',
-        name: 'specialRequests',
-        message: 'Any special requests or dietary restrictions?',
-        default: 'None'
-      }
-    ];
-
-    const answers = await inquirer.prompt(questions);
-    
-    // Merge with existing booking details
-    const finalBooking = { ...bookingDetails, ...answers };
-
-    console.log(chalk.blue.bold('\n📝 Booking Summary:'));
-    console.log(chalk.white(`   Date: ${finalBooking.date || 'To be determined'}`));
-    console.log(chalk.white(`   Party size: ${finalBooking.pax} people`));
-    console.log(chalk.white(`   Meal type: ${finalBooking.mealType}`));
-    console.log(chalk.white(`   Budget: $${finalBooking.budget} per person`));
-    if (finalBooking.cuisinePreferences && finalBooking.cuisinePreferences.length > 0) {
-      console.log(chalk.white(`   Cuisines: ${finalBooking.cuisinePreferences.join(', ')}`));
-    }
-
-    // Search for restaurants
-    const restaurants = await searchChopeRestaurants(
-      finalBooking.date,
-      finalBooking.pax,
-      finalBooking.budget
-    );
-
-    console.log(chalk.green.bold('\n🎯 Restaurant Recommendations:\n'));
-
-    restaurants.forEach((restaurant, index) => {
-      console.log(chalk.white.bold(`${index + 1}. ${restaurant.name}`));
-      console.log(chalk.gray(`   🍽️  ${restaurant.cuisine} cuisine`));
-      console.log(chalk.gray(`   💰 ${restaurant.price} (Est. $${finalBooking.budget * finalBooking.pax} total)`));
-      console.log(chalk.gray(`   ⭐ Rating: ${restaurant.rating}/5`));
-      console.log(chalk.yellow(`   📅 ${restaurant.availability}`));
-      console.log(chalk.cyan(`   🔗 Book: ${restaurant.bookingUrl}\n`));
-    });
-
-    // Ask if user wants to add reminder to calendar
-    const addReminder = await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'addToCalendar',
-        message: 'Would you like to add a booking reminder to your calendar?',
-        default: true
-      }
-    ]);
-
-    if (addReminder.addToCalendar) {
-      const selectedRestaurant = await inquirer.prompt([
-        {
-          type: 'list',
-          name: 'restaurant',
-          message: 'Which restaurant?',
-          choices: restaurants.map((r, i) => ({
-            name: r.name,
+          message: 'Which event would you like to reschedule?',
+          choices: existingEvents.slice(0, 10).map((e, i) => ({
+            name: `${e.title} (${e.startTime ? format(parseISO(e.startTime), 'MMM dd, HH:mm') : 'Date TBD'})`,
             value: i
           }))
         }
       ]);
 
-      const restaurant = restaurants[selectedRestaurant.restaurant];
-      
-      console.log(chalk.yellow('\n📅 Creating calendar reminder...'));
-      
-      // Create calendar event using Claude MCP
-      const createEventPrompt = `Using the Google Calendar MCP server, please create a new calendar event:
-      Title: Restaurant Booking - ${restaurant.name}
-      Date: ${finalBooking.date}
-      Time: ${finalBooking.mealType === 'Lunch' ? '12:30' : '19:00'}
-      Location: ${restaurant.name}, Singapore
-      Description: Booking for ${finalBooking.pax} people. Budget: $${finalBooking.budget}/person. ${finalBooking.specialRequests ? 'Special requests: ' + finalBooking.specialRequests : ''}
-      
-      Please create this event and confirm when done.`;
+      const selectedEvent = existingEvents[eventChoice.selection];
+      eventDetails.title = selectedEvent.title;
+      eventDetails.existingEvent = selectedEvent;
+    }
 
-      try {
-        await executeClaudeCommand(createEventPrompt);
-        console.log(chalk.green('✅ Calendar reminder added successfully!'));
-      } catch (error) {
-        console.log(chalk.yellow('⚠️  Could not add to calendar automatically.'));
-        console.log(chalk.white('Please add manually to your calendar.'));
+    // Collect event details
+    const questions = [
+      {
+        type: 'input',
+        name: 'title',
+        message: 'Event title:',
+        when: !eventDetails.title,
+        validate: input => input.length > 0 || 'Please enter an event title'
+      },
+      {
+        type: 'list',
+        name: 'eventType',
+        message: 'What type of event is this?',
+        choices: [
+          { name: '☕ Coffee meeting', value: 'coffee' },
+          { name: '🍽️ Lunch', value: 'lunch' },
+          { name: '🌙 Dinner', value: 'dinner' },
+          { name: '🍳 Breakfast', value: 'breakfast' },
+          { name: '💼 Business meeting', value: 'meeting' },
+          { name: '🍺 Drinks', value: 'drinks' },
+          { name: '📝 Other', value: 'other' }
+        ]
+      },
+      {
+        type: 'number',
+        name: 'duration',
+        message: 'Duration (in minutes):',
+        default: answers => {
+          const defaults = {
+            coffee: 30,
+            lunch: 60,
+            dinner: 90,
+            breakfast: 45,
+            meeting: 60,
+            drinks: 90,
+            other: 60
+          };
+          return defaults[answers.eventType] || 60;
+        },
+        validate: input => input > 0 && input <= 480 || 'Please enter a valid duration (1-480 minutes)'
+      },
+      {
+        type: 'input',
+        name: 'attendees',
+        message: 'Attendees (comma-separated emails, or press enter to skip):',
+        default: ''
+      },
+      {
+        type: 'input',
+        name: 'preferredDate',
+        message: 'Preferred date (YYYY-MM-DD) or leave blank for suggestions:',
+        validate: input => {
+          if (!input) return true;
+          const date = new Date(input);
+          return !isNaN(date.getTime()) || 'Please enter a valid date (YYYY-MM-DD)';
+        }
+      }
+    ];
+
+    const answers = await inquirer.prompt(questions);
+    
+    // Merge with existing event details
+    eventDetails = { ...eventDetails, ...answers };
+
+    console.log(chalk.blue.bold('\n🔍 Finding optimal time slots...\n'));
+
+    // Get smart time suggestions
+    const suggestions = suggestTimeSlots(
+      eventDetails.eventType, 
+      eventDetails.preferredDate,
+      eventDetails.duration
+    );
+
+    // Check availability for each suggestion
+    const availableSlots = [];
+    for (const suggestion of suggestions) {
+      const endTime = addMinutes(suggestion.date, eventDetails.duration);
+      const isAvailable = await checkAvailability(
+        format(suggestion.date, 'yyyy-MM-dd HH:mm'),
+        format(endTime, 'yyyy-MM-dd HH:mm')
+      );
+      
+      if (isAvailable) {
+        availableSlots.push({
+          ...suggestion,
+          status: '✅ Available'
+        });
+      } else {
+        availableSlots.push({
+          ...suggestion,
+          status: '❌ Conflict'
+        });
+      }
+      
+      // Stop after finding 5 available slots
+      if (availableSlots.filter(s => s.status.includes('✅')).length >= 5) {
+        break;
       }
     }
 
-    console.log(chalk.green.bold('\n✨ Happy dining! Remember to make your reservation soon.\n'));
+    // Display suggestions
+    console.log(chalk.green.bold('📋 Suggested time slots:\n'));
+    
+    availableSlots.forEach((slot, index) => {
+      const timeStr = format(slot.date, 'EEEE, MMM dd @ h:mm a');
+      console.log(`${slot.status} ${chalk.white(timeStr)}`);
+      
+      // Add contextual information
+      if (eventDetails.eventType === 'dinner' && slot.date.getHours() >= 19) {
+        console.log(chalk.gray('   Perfect for a relaxed evening meal'));
+      } else if (eventDetails.eventType === 'lunch' && slot.date.getHours() === 12) {
+        console.log(chalk.gray('   Standard lunch hour'));
+      } else if (eventDetails.eventType === 'coffee' && slot.date.getHours() < 11) {
+        console.log(chalk.gray('   Great for a morning catch-up'));
+      } else if (eventDetails.eventType === 'meeting' && slot.date.getHours() >= 9 && slot.date.getHours() <= 17) {
+        console.log(chalk.gray('   Within business hours'));
+      }
+    });
+
+    // Ask user to select a time slot
+    const availableOnly = availableSlots.filter(s => s.status.includes('✅'));
+    
+    if (availableOnly.length === 0) {
+      console.log(chalk.red('\n❌ No available time slots found in the suggested range.'));
+      console.log(chalk.yellow('Try selecting a different date range or event type.'));
+      return;
+    }
+
+    const timeChoice = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'selectedTime',
+        message: '\nSelect a time slot:',
+        choices: [
+          ...availableOnly.map(slot => ({
+            name: format(slot.date, 'EEEE, MMM dd @ h:mm a'),
+            value: slot.timeString
+          })),
+          { name: 'Enter custom time', value: 'custom' },
+          { name: 'Cancel', value: 'cancel' }
+        ]
+      }
+    ]);
+
+    if (timeChoice.selectedTime === 'cancel') {
+      console.log(chalk.yellow('\n📅 Scheduling cancelled.'));
+      return;
+    }
+
+    let finalTime = timeChoice.selectedTime;
+    
+    if (timeChoice.selectedTime === 'custom') {
+      const customTime = await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'time',
+          message: 'Enter custom date and time (YYYY-MM-DD HH:MM):',
+          validate: input => {
+            const date = new Date(input);
+            return !isNaN(date.getTime()) || 'Please enter a valid date and time';
+          }
+        }
+      ]);
+      finalTime = customTime.time;
+    }
+
+    // Ask for location
+    const locationPrompt = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'location',
+        message: 'Location (or leave blank):',
+        default: ''
+      }
+    ]);
+
+    // Create the calendar event
+    console.log(chalk.yellow('\n📅 Creating calendar event...'));
+    
+    const createEventPrompt = `Using the Google Calendar MCP server, please create a new calendar event:
+    Title: ${eventDetails.title || `${eventDetails.eventType} meeting`}
+    Date/Time: ${finalTime}
+    Duration: ${eventDetails.duration} minutes
+    ${locationPrompt.location ? `Location: ${locationPrompt.location}` : ''}
+    ${eventDetails.attendees ? `Attendees: ${eventDetails.attendees}` : ''}
+    
+    Please create this event and confirm when done.`;
+
+    try {
+      await executeClaudeCommand(createEventPrompt);
+      console.log(chalk.green('\n✅ Event successfully scheduled!'));
+      console.log(chalk.white(`📅 ${eventDetails.title || `${eventDetails.eventType} meeting`}`));
+      console.log(chalk.white(`⏰ ${format(new Date(finalTime), 'EEEE, MMMM dd @ h:mm a')}`));
+      if (locationPrompt.location) {
+        console.log(chalk.white(`📍 ${locationPrompt.location}`));
+      }
+    } catch (error) {
+      console.log(chalk.red('❌ Could not create calendar event automatically.'));
+      console.log(chalk.yellow('\nPlease add manually to your calendar:'));
+      console.log(chalk.white(`Title: ${eventDetails.title}`));
+      console.log(chalk.white(`Time: ${finalTime}`));
+      console.log(chalk.white(`Duration: ${eventDetails.duration} minutes`));
+    }
+
+    // Smart suggestions based on event type
+    console.log(chalk.blue.bold('\n💡 Tips for your event:\n'));
+    
+    const eventTips = {
+      dinner: [
+        'Consider making a reservation if it\'s a popular restaurant',
+        'Check dietary restrictions with attendees beforehand',
+        'Allow extra time for a relaxed meal'
+      ],
+      lunch: [
+        'Book a quiet venue if it\'s a business lunch',
+        'Consider proximity to attendees\' offices',
+        'Keep it to 60-90 minutes for a working lunch'
+      ],
+      coffee: [
+        'Choose a quiet café for important discussions',
+        'Morning coffee is great for energetic brainstorming',
+        'Afternoon coffee helps beat the post-lunch slump'
+      ],
+      meeting: [
+        'Send an agenda beforehand',
+        'Book a room if needed',
+        'Include dial-in details for remote participants'
+      ],
+      breakfast: [
+        'Great for building relationships in a relaxed setting',
+        'Keep it early enough to not interfere with the work day',
+        'Light and healthy options keep everyone energized'
+      ],
+      drinks: [
+        'Happy hour (5-7 PM) is ideal for team bonding',
+        'Choose a venue that\'s convenient for everyone',
+        'Consider non-alcoholic options for all attendees'
+      ]
+    };
+
+    const tips = eventTips[eventDetails.eventType] || ['Prepare any materials you need beforehand', 'Confirm with attendees a day before'];
+    tips.forEach(tip => console.log(chalk.gray(`• ${tip}`)));
+
+    console.log(chalk.green.bold('\n✨ Your event is all set!\n'));
 
   } catch (error) {
     console.error(chalk.red('❌ Error:'), error.message);
@@ -339,5 +435,10 @@ async function bookRestaurant() {
   }
 }
 
-// Run the booking assistant
-bookRestaurant();
+// Helper function to add minutes to a date
+function addMinutes(date, minutes) {
+  return new Date(date.getTime() + minutes * 60000);
+}
+
+// Run the smart scheduling assistant
+smartScheduling();

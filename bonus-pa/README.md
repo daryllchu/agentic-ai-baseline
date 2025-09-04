@@ -12,13 +12,15 @@ A personal assistant implementation using Claude Code with Google Calendar MCP i
 - Offers time-based productivity recommendations
 - Distinguishes between virtual and in-person meetings
 
-### 🍽️ Restaurant Booking Assistant (`/book`)
-- Scans upcoming calendar events for potential dining occasions
-- Interactive CLI for booking details (party size, budget, cuisine)
-- Provides restaurant recommendations based on preferences
-- Simulates Chope.co integration for availability
-- Can create calendar reminders for bookings
-- Supports dietary restrictions and special requests
+### 📅 Smart Scheduling Assistant (`/book`)
+- Analyzes calendar to find optimal meeting times
+- Suggests appropriate time slots based on event type:
+  - Dinner meetings → Evening slots (6:30-8 PM)
+  - Business lunch → Noon slots (12-1 PM)
+  - Coffee meetings → Morning or afternoon slots
+- Checks calendar availability to avoid conflicts
+- Creates calendar events with smart defaults
+- Provides contextual tips for different event types
 
 ## Prerequisites
 
@@ -99,9 +101,9 @@ This will:
 - Highlight important meetings
 - Provide a summary with total events and travel time
 
-### Restaurant Booking Assistant
+### Smart Scheduling Assistant
 
-Find and book restaurants for upcoming events:
+Find the perfect time for your meetings and events:
 
 ```bash
 npm run book
@@ -110,11 +112,11 @@ node commands/book.js
 ```
 
 This will:
-1. Scan your calendar for potential dining events
-2. Let you select an event or create a new booking
-3. Ask for booking details (party size, budget, cuisine)
-4. Provide restaurant recommendations
-5. Optionally add a reminder to your calendar
+1. Scan your calendar for available time slots
+2. Suggest optimal times based on event type (dinner, lunch, coffee, etc.)
+3. Check for conflicts with existing events
+4. Create calendar events with appropriate durations
+5. Provide helpful tips for different meeting types
 
 ## Project Structure
 
@@ -155,19 +157,21 @@ bonus-pa/
 3. Verify Google Calendar API is enabled in your project
 4. Check console for specific error messages
 
-### Restaurant Booking Not Working
-- The Chope.co integration is simulated for demonstration
-- In production, you would integrate with Chope's actual API
+### Scheduling Assistant Not Working
+1. Ensure calendar has proper read/write permissions
+2. Check that event creation is enabled in your Google Calendar API
+3. Verify time zone settings are correct
 
 ## Future Enhancements
 
-- [ ] Real Chope.co API integration
-- [ ] Gmail integration for email summaries
+- [ ] Integration with team members' calendars for group scheduling
 - [ ] Weather information in morning briefing
 - [ ] Traffic data for accurate travel times
 - [ ] Smart meeting preparation reminders
 - [ ] Integration with task management systems
 - [ ] Voice interface support
+- [ ] Automatic conflict resolution suggestions
+- [ ] Meeting room booking integration
 
 ## License
 
