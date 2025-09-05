@@ -6,4 +6,13 @@ Title: Practical Agentic AI in Software Development
 
 Explore how agentic AI is transforming software development across the entire lifecycle. From requirement analysis to deployment, AI agents accelerate every phase, enhancing requirement gathering, product planning, PRD writing, implementation, automated testing, debugging, and DevOps. Learn how these agents coordinate tasks, share context, and maintain consistency throughout the process. Gain insights into the Model Context Protocol (MCP), which enables seamless integration between agents and tools, allowing interaction with databases, APIs, and development platforms. Join us to explore practical applications and strategies that will help you harness practical agentic AI.
 
-Slide deck: https://speakerdeck.com/uzyn/practical-agentic-ai-in-software-engineering
+## Content:
+
+* [Prompts](./prompts.md) used in the demo
+* [Slide deck](https://speakerdeck.com/uzyn/practical-agentic-ai-in-software-engineering)
+* Demo files at `demo-*/`.
+
+## Connect with me
+
+* [My site and blog](https://uzyn.com)
+* [LinkedIn](https://www.linkedin.com/in/uzynchua/)
