@@ -1,0 +1,419 @@
+{
+	"info": {
+		"_postman_id": "hr-data-hub-api",
+		"name": "HR Data Exchange Hub API",
+		"description": "API collection for HR Data Exchange Hub - ETL platform for integrating employee data from multiple HR systems",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@hr-data-hub.com\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{base_url}}/api/auth/logout",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "logout"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Health Status",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": ["{{base_url}}"],
+							"path": ["health"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Data Sources",
+			"item": [
+				{
+					"name": "List Data Sources",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/data-sources/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "data-sources", ""]
+						}
+					}
+				},
+				{
+					"name": "Create Data Source",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Workday Production\",\n  \"type\": \"workday\",\n  \"connection_info\": {\n    \"endpoint\": \"https://api.workday.com\",\n    \"username\": \"api_user\",\n    \"password\": \"api_password\"\n  },\n  \"is_active\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/data-sources/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "data-sources", ""]
+						}
+					}
+				},
+				{
+					"name": "Get Data Source",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/data-sources/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "data-sources", "1"]
+						}
+					}
+				},
+				{
+					"name": "Update Data Source",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Workday Production Updated\",\n  \"is_active\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/data-sources/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "data-sources", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Data Source",
+					"request": {
+						"method": "DELETE",
+						"url": {
+							"raw": "{{base_url}}/api/data-sources/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "data-sources", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Employees",
+			"item": [
+				{
+					"name": "List Employees",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/employees/?skip=0&limit=25&sort_by=created_at&sort_order=desc",
+							"host": ["{{base_url}}"],
+							"path": ["api", "employees", ""],
+							"query": [
+								{
+									"key": "skip",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "25"
+								},
+								{
+									"key": "sort_by",
+									"value": "created_at"
+								},
+								{
+									"key": "sort_order",
+									"value": "desc"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Employee",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/employees/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "employees", "1"]
+						}
+					}
+				},
+				{
+					"name": "Employee Stats",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/employees/stats/summary",
+							"host": ["{{base_url}}"],
+							"path": ["api", "employees", "stats", "summary"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "ETL Jobs",
+			"item": [
+				{
+					"name": "Upload File",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "data_source_id",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/etl/upload",
+							"host": ["{{base_url}}"],
+							"path": ["api", "etl", "upload"]
+						}
+					}
+				},
+				{
+					"name": "List ETL Jobs",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/etl/jobs?skip=0&limit=25",
+							"host": ["{{base_url}}"],
+							"path": ["api", "etl", "jobs"],
+							"query": [
+								{
+									"key": "skip",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "25"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get ETL Job",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/etl/jobs/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "etl", "jobs", "1"]
+						}
+					}
+				},
+				{
+					"name": "Start Processing",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{base_url}}/api/etl/jobs/1/process",
+							"host": ["{{base_url}}"],
+							"path": ["api", "etl", "jobs", "1", "process"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "API Tokens",
+			"item": [
+				{
+					"name": "List Tokens",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/tokens",
+							"host": ["{{base_url}}"],
+							"path": ["api", "tokens"]
+						}
+					}
+				},
+				{
+					"name": "Create Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"My API Token\",\n  \"expires_at\": null\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/tokens",
+							"host": ["{{base_url}}"],
+							"path": ["api", "tokens"]
+						}
+					}
+				},
+				{
+					"name": "Update Token Status",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"is_active\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/tokens/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "tokens", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Token",
+					"request": {
+						"method": "DELETE",
+						"url": {
+							"raw": "{{base_url}}/api/tokens/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "tokens", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Field Mappings",
+			"item": [
+				{
+					"name": "Get Mappings",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/mappings/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "mappings", "1"]
+						}
+					}
+				},
+				{
+					"name": "Create Mapping",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"source_field\": \"Employee_ID\",\n  \"target_field\": \"employee_id\",\n  \"transformation_rule\": null,\n  \"is_required\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/mappings/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "mappings", "1"]
+						}
+					}
+				},
+				{
+					"name": "List Templates",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/mappings/templates",
+							"host": ["{{base_url}}"],
+							"path": ["api", "mappings", "templates"]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		}
+	]
+}

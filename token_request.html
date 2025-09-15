@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Token Request</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .result { margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 4px; }
+        .token { word-break: break-all; font-family: monospace; background: #e9ecef; padding: 10px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>HR Data Hub - API Token Request</h1>
+    <p>External systems can request JWT tokens for API access using this form.</p>
+    
+    <form id="tokenForm">
+        <div class="form-group">
+            <label for="clientName">Client Name:</label>
+            <input type="text" id="clientName" required placeholder="e.g., My Integration System">
+        </div>
+        
+        <div class="form-group">
+            <label for="apiKey">API Key:</label>
+            <select id="apiKey" required>
+                <option value="">Select API Key</option>
+                <option value="demo_key_123">Demo Key (demo_key_123)</option>
+                <option value="workday_integration">Workday Integration</option>
+                <option value="sap_connector">SAP HCM Connector</option>
+            </select>
+        </div>
+        
+        <button type="submit">Request Token</button>
+    </form>
+    
+    <div id="result" class="result" style="display: none;">
+        <h3>Token Generated Successfully</h3>
+        <p><strong>Access Token:</strong></p>
+        <div id="token" class="token"></div>
+        <p><strong>Token Type:</strong> Bearer</p>
+        <p><strong>Expires In:</strong> <span id="expiresIn"></span> seconds (24 hours)</p>
+        <p><strong>Usage:</strong> Include in API requests as <code>Authorization: Bearer &lt;token&gt;</code></p>
+    </div>
+    
+    <div id="error" style="display: none; color: red; margin-top: 20px;"></div>
+
+    <script>
+        document.getElementById('tokenForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const clientName = document.getElementById('clientName').value;
+            const apiKey = document.getElementById('apiKey').value;
+            
+            try {
+                const response = await fetch('/public/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        client_name: clientName,
+                        api_key: apiKey
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('token').textContent = data.access_token;
+                    document.getElementById('expiresIn').textContent = data.expires_in;
+                    document.getElementById('result').style.display = 'block';
+                    document.getElementById('error').style.display = 'none';
+                } else {
+                    const error = await response.json();
+                    document.getElementById('error').textContent = error.detail || 'Failed to generate token';
+                    document.getElementById('error').style.display = 'block';
+                    document.getElementById('result').style.display = 'none';
+                }
+            } catch (err) {
+                document.getElementById('error').textContent = 'Network error: ' + err.message;
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('result').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

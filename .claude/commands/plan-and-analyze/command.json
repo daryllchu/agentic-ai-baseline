@@ -1,0 +1,5 @@
+{
+  "command": "plan-and-analyze",
+  "description": "Define goals, requirements, scope, research and generate Product Requirement Document (PRD)",
+  "agent": "product-manager-prd"
+}

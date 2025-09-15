@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wd:Report_Data xmlns:wd="urn:com.workday.report/HR_Employee_Export">
+    <wd:Employee>
+        <wd:Employee_ID>EMP001</wd:Employee_ID>
+        <wd:First_Name>John</wd:First_Name>
+        <wd:Last_Name>Smith</wd:Last_Name>
+        <wd:Email_Address>john.smith@company.com</wd:Email_Address>
+        <wd:Department>Engineering</wd:Department>
+        <wd:Position_Title>Senior Software Engineer</wd:Position_Title>
+        <wd:Hire_Date>2022-03-15</wd:Hire_Date>
+        <wd:Employee_Status>Inactive</wd:Employee_Status>
+        <wd:Manager_ID>MGR001</wd:Manager_ID>
+        <wd:Location>New York</wd:Location>
+        <wd:Salary>95000</wd:Salary>
+    </wd:Employee>
+    
+    <wd:Employee>
+        <wd:Employee_ID>EMP002</wd:Employee_ID>
+        <wd:First_Name>Sarah</wd:First_Name>
+        <wd:Last_Name>Johnson</wd:Last_Name>
+        <wd:Email_Address>sarah.johnson@company.com</wd:Email_Address>
+        <wd:Department>Marketing</wd:Department>
+        <wd:Position_Title>Marketing Manager</wd:Position_Title>
+        <wd:Hire_Date>2021-08-22</wd:Hire_Date>
+        <wd:Employee_Status>Inactive</wd:Employee_Status>
+        <wd:Manager_ID>MGR002</wd:Manager_ID>
+        <wd:Location>San Francisco</wd:Location>
+        <wd:Salary>85000</wd:Salary>
+    </wd:Employee>
+    
+    <wd:Employee>
+        <wd:Employee_ID>EMP003</wd:Employee_ID>
+        <wd:First_Name>Michael</wd:First_Name>
+        <wd:Last_Name>Brown</wd:Last_Name>
+        <wd:Email_Address>michael.brown@company.com</wd:Email_Address>
+        <wd:Department>Finance</wd:Department>
+        <wd:Position_Title>Financial Analyst</wd:Position_Title>
+        <wd:Hire_Date>2023-01-10</wd:Hire_Date>
+        <wd:Employee_Status>Inactive</wd:Employee_Status>
+        <wd:Manager_ID>MGR003</wd:Manager_ID>
+        <wd:Location>Chicago</wd:Location>
+        <wd:Salary>70000</wd:Salary>
+    </wd:Employee>
+    
+    <wd:Employee>
+        <wd:Employee_ID>EMP004</wd:Employee_ID>
+        <wd:First_Name>Emily</wd:First_Name>
+        <wd:Last_Name>Davis</wd:Last_Name>
+        <wd:Email_Address>emily.davis@company.com</wd:Email_Address>
+        <wd:Department>Human Resources</wd:Department>
+        <wd:Position_Title>HR Specialist</wd:Position_Title>
+        <wd:Hire_Date>2022-11-05</wd:Hire_Date>
+        <wd:Employee_Status>Inactive</wd:Employee_Status>
+        <wd:Manager_ID>MGR004</wd:Manager_ID>
+        <wd:Location>Austin</wd:Location>
+        <wd:Salary>65000</wd:Salary>
+    </wd:Employee>
+    
+    <wd:Employee>
+        <wd:Employee_ID>EMP005</wd:Employee_ID>
+        <wd:First_Name>David</wd:First_Name>
+        <wd:Last_Name>Wilson</wd:Last_Name>
+        <wd:Email_Address>david.wilson@company.com</wd:Email_Address>
+        <wd:Department>Engineering</wd:Department>
+        <wd:Position_Title>DevOps Engineer</wd:Position_Title>
+        <wd:Hire_Date>2023-06-12</wd:Hire_Date>
+        <wd:Employee_Status>Inactive</wd:Employee_Status>
+        <wd:Manager_ID>MGR001</wd:Manager_ID>
+        <wd:Location>Seattle</wd:Location>
+        <wd:Salary>88000</wd:Salary>
+    </wd:Employee>
+</wd:Report_Data>

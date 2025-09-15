@@ -7,7 +7,7 @@ Place at README.md or IDEA.md
 
 ## Goals
 
-We want to make a web-based leave management system for our small company.
+We want to make a soccer legend app
 
 ## Requirements
 

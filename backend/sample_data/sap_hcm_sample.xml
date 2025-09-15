@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sap:EmployeeData xmlns:sap="urn:sap.com:hcm:employee:export">
+    <sap:Employee>
+        <sap:PersonnelNumber>00001234</sap:PersonnelNumber>
+        <sap:FirstName>Maria</sap:FirstName>
+        <sap:LastName>Garcia</sap:LastName>
+        <sap:EmailAddress>maria.garcia@company.com</sap:EmailAddress>
+        <sap:OrganizationalUnit>IT Department</sap:OrganizationalUnit>
+        <sap:JobTitle>Software Developer</sap:JobTitle>
+        <sap:HireDate>2022-05-15</sap:HireDate>
+        <sap:EmployeeStatus>Active</sap:EmployeeStatus>
+        <sap:SupervisorNumber>00005678</sap:SupervisorNumber>
+        <sap:CostCenter>CC1001</sap:CostCenter>
+        <sap:CompanyCode>1000</sap:CompanyCode>
+    </sap:Employee>
+    
+    <sap:Employee>
+        <sap:PersonnelNumber>00002345</sap:PersonnelNumber>
+        <sap:FirstName>Ahmed</sap:FirstName>
+        <sap:LastName>Hassan</sap:LastName>
+        <sap:EmailAddress>ahmed.hassan@company.com</sap:EmailAddress>
+        <sap:OrganizationalUnit>Finance</sap:OrganizationalUnit>
+        <sap:JobTitle>Financial Controller</sap:JobTitle>
+        <sap:HireDate>2021-09-01</sap:HireDate>
+        <sap:EmployeeStatus>Active</sap:EmployeeStatus>
+        <sap:SupervisorNumber>00006789</sap:SupervisorNumber>
+        <sap:CostCenter>CC2001</sap:CostCenter>
+        <sap:CompanyCode>1000</sap:CompanyCode>
+    </sap:Employee>
+    
+    <sap:Employee>
+        <sap:PersonnelNumber>00003456</sap:PersonnelNumber>
+        <sap:FirstName>Lisa</sap:FirstName>
+        <sap:LastName>Chen</sap:LastName>
+        <sap:EmailAddress>lisa.chen@company.com</sap:EmailAddress>
+        <sap:OrganizationalUnit>Marketing</sap:OrganizationalUnit>
+        <sap:JobTitle>Marketing Specialist</sap:JobTitle>
+        <sap:HireDate>2023-02-20</sap:HireDate>
+        <sap:EmployeeStatus>Active</sap:EmployeeStatus>
+        <sap:SupervisorNumber>00007890</sap:SupervisorNumber>
+        <sap:CostCenter>CC3001</sap:CostCenter>
+        <sap:CompanyCode>1000</sap:CompanyCode>
+    </sap:Employee>
+</sap:EmployeeData>
